@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sriv.shivam.musicwiki.models.genres.Genres
-import com.sriv.shivam.musicwiki.models.genres.Tag
+import com.sriv.shivam.musicwiki.models.taginfo.TagInfo
 import com.sriv.shivam.musicwiki.repository.MusicWikiRepository
 import com.sriv.shivam.musicwiki.utils.Resource
 import kotlinx.coroutines.launch
@@ -15,12 +15,13 @@ class MusicWikiViewModel(
 ): ViewModel() {
 
     val tagsLiveData: MutableLiveData<Resource<Genres>> = MutableLiveData()
+    val tagDetailsLiveData: MutableLiveData<Resource<TagInfo>> = MutableLiveData()
 
     init {
         getTopTags()
     }
 
-    private fun getTopTags() = viewModelScope.launch {
+    fun getTopTags() = viewModelScope.launch {
         tagsLiveData.postValue(Resource.Loading())
         val tagResponse = musicWikiRepository.getTopTags()
         tagsLiveData.postValue(handleTagResponse(tagResponse))
@@ -33,5 +34,20 @@ class MusicWikiViewModel(
             }
         }
         return Resource.Error(tagResponse.message())
+    }
+
+    fun getTagDetails(tagName: String) = viewModelScope.launch {
+        tagDetailsLiveData.postValue(Resource.Loading())
+        val tagDetailsResponse = musicWikiRepository.getTagDetails(tagName)
+        tagDetailsLiveData.postValue(handleTagDetailsResponse(tagDetailsResponse))
+    }
+
+    private fun handleTagDetailsResponse(tagDetailsResponse: Response<TagInfo>): Resource<TagInfo> {
+        if(tagDetailsResponse.isSuccessful) {
+            tagDetailsResponse.body()?.let {
+                return Resource.Success(it)
+            }
+        }
+        return Resource.Error(tagDetailsResponse.message())
     }
 }

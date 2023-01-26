@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sriv.shivam.musicwiki.MainActivity
 import com.sriv.shivam.musicwiki.R
@@ -34,6 +37,13 @@ class HomeFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         setupRecyclerView()
 
+        genreAdapter.setOnItemClickListener {
+            val tagName = it.name
+            Log.d(TAG, "$tagName clicked")
+            setFragmentResult("selectedTag", bundleOf("data" to tagName))
+            findNavController().navigate(R.id.action_homeFragment_to_genreDetailsFragment)
+        }
+
         /*
         We will observe tag LiveData to get updated with everytime we fetch
         top tags from local/remote database using api. The ui is updated according to
@@ -42,31 +52,31 @@ class HomeFragment : Fragment() {
         viewModel.tagsLiveData.observe(viewLifecycleOwner, Observer {
             when(it) {
                 is Resource.Success -> {
-//                    hideProgressBar()
+                    hideProgressBar()
                     it.data?.let { tagResponse ->
                         genreAdapter.differ.submitList(tagResponse.toptags.tag)
                     }
                 }
                 is Resource.Error -> {
-//                    hideProgressBar()
+                    hideProgressBar()
                     it.message?.let {
                         Log.e(TAG, "An error occurred")
                     }
                 }
                 is Resource.Loading -> {
-//                    showProgressBar()
+                    showProgressBar()
                 }
             }
         })
     }
 
-//    private fun hideProgressBar() {
-//        paginationProgressBar.visibility = View.INVISIBLE
-//    }
-//
-//    private fun showProgressBar() {
-//        paginationProgressBar.visibility = View.VISIBLE
-//    }
+    private fun hideProgressBar() {
+        paginationProgressBar.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        paginationProgressBar.visibility = View.VISIBLE
+    }
 
     private fun setupRecyclerView() {
         genreAdapter = GenreRecyclerViewAdapter()

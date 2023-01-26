@@ -1,6 +1,6 @@
 package com.sriv.shivam.musicwiki.api
 
-import com.sriv.shivam.musicwiki.utils.Constants.Companion.BASE_URL
+import com.sriv.shivam.musicwiki.utils.BaseUrl.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

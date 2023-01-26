@@ -6,4 +6,6 @@
     <string name="welcome">Welcome!</string>
     <string name="choose_a_genre_to_start_with">Choose a genre to start with</string>
     <string name="item">Item</string>
+    <string name="genre">Genre</string>
+    <string name="sample_text_to_indicate_tag_summary">Sample text to indicate tag summary......</string>
 </resources>
