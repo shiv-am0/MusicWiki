@@ -8,4 +8,8 @@
     <string name="item">Item</string>
     <string name="genre">Genre</string>
     <string name="sample_text_to_indicate_tag_summary">Sample text to indicate tag summary......</string>
+    <string name="view_details">View Details</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artists</string>
+    <string name="tracks">Tracks</string>
 </resources>

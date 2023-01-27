@@ -1,5 +1,6 @@
 package com.sriv.shivam.musicwiki.api
 
+import com.sriv.shivam.musicwiki.models.albums.Albums
 import com.sriv.shivam.musicwiki.models.genres.Genres
 import com.sriv.shivam.musicwiki.models.taginfo.TagInfo
 import com.sriv.shivam.musicwiki.utils.ApiKey.API_KEY
@@ -30,4 +31,16 @@ interface MusicWikiApi {
         @Query("format")
         format: String = "json"
     ):Response<TagInfo>
+
+    @POST("/2.0")
+    suspend fun getTopAlbums(
+        @Query("tag")
+        tagName: String,
+        @Query("method")
+        method: String = "tag.gettopalbums",
+        @Query("api_key")
+        apiKey: String = API_KEY,
+        @Query("format")
+        format: String = "json"
+    ):Response<Albums>
 }

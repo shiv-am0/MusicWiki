@@ -6,17 +6,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.sriv.shivam.musicwiki.MainActivity
 import com.sriv.shivam.musicwiki.R
+import com.sriv.shivam.musicwiki.adapters.PagerAdapter
+import com.sriv.shivam.musicwiki.models.albums.Albums
 import com.sriv.shivam.musicwiki.utils.Resource
 import com.sriv.shivam.musicwiki.viewmodel.MusicWikiViewModel
 import kotlinx.android.synthetic.main.fragment_genre_details.*
+import kotlinx.android.synthetic.main.fragment_pager.*
 
 class GenreDetailsFragment : Fragment() {
     lateinit var viewModel: MusicWikiViewModel
     private var tagName: String? = null
+    lateinit var albums: Albums
 
     private val TAG = "GenreDetailsFragment"
 
@@ -25,7 +32,6 @@ class GenreDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_genre_details, container, false)
     }
 
@@ -39,6 +45,7 @@ class GenreDetailsFragment : Fragment() {
             tagTitle.text = tagName
             Log.d(TAG, "getDetails function called")
             viewModel.getTagDetails(tagTitle.text.toString())
+            viewModel.getTopAlbums(tagTitle.text.toString())
         }
 
         /*
@@ -67,6 +74,11 @@ class GenreDetailsFragment : Fragment() {
                 }
             }
         })
+
+        viewDetailsBtn.setOnClickListener {
+            setFragmentResult("selectedTag", bundleOf("data" to tagTitle.text.toString()))
+            findNavController().navigate(R.id.action_genreDetailsFragment_to_pagerFragment)
+        }
     }
 
     private fun hideProgressBar() {

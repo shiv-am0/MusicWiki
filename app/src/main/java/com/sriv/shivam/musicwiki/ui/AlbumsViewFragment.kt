@@ -1,34 +1,33 @@
 package com.sriv.shivam.musicwiki.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import com.sriv.shivam.musicwiki.MainActivity
 import com.sriv.shivam.musicwiki.R
+import com.sriv.shivam.musicwiki.adapters.AlbumDetailsRecyclerViewAdapter
+import com.sriv.shivam.musicwiki.models.albums.Albums
+import com.sriv.shivam.musicwiki.utils.Resource
+import com.sriv.shivam.musicwiki.viewmodel.MusicWikiViewModel
+import kotlinx.android.synthetic.main.fragment_albums_view.*
+import kotlinx.android.synthetic.main.fragment_genre_details.*
+import kotlinx.android.synthetic.main.fragment_genre_details.tagTitle
+import kotlinx.android.synthetic.main.fragment_home.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AlbumsViewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AlbumsViewFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var viewModel: MusicWikiViewModel
+    private var tagName: String? = null
+    lateinit var albums: Albums
+    lateinit var topAlbumsAdapter: AlbumDetailsRecyclerViewAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val TAG = "AlbumsViewFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +37,55 @@ class AlbumsViewFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_albums_view, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumsViewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumsViewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
+        setupRecyclerView()
+
+        setFragmentResultListener("selectedTag") { key, bundle ->
+            tagName = bundle.getString("data")
+            Log.d(TAG, "$tagName in Albums View Fragment")
+            tagTitle.text = tagName
+            tagName?.let { viewModel.getTopAlbums(it)
+            }
+        }
+
+        viewModel.tagTopAlbumsLiveData.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    it.data?.let { albumsResponse ->
+                        topAlbumsAdapter.differ.submitList(albumsResponse.albums.album)
+                        Log.d(TAG, "Album Details loaded successfully")
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    it.message?.let {
+                        Log.e(TAG, "An error occurred")
+                    }
+                }
+                is Resource.Loading -> {
+                    Log.d(TAG, "Tag Details loading")
+                    showProgressBar()
                 }
             }
+        })
+    }
+
+    private fun hideProgressBar() {
+        paginationProgressBarA.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        paginationProgressBarA.visibility = View.VISIBLE
+    }
+
+    private fun setupRecyclerView() {
+        topAlbumsAdapter = AlbumDetailsRecyclerViewAdapter()
+        albumsRecyclerView.apply {
+            adapter = topAlbumsAdapter
+            layoutManager = GridLayoutManager(activity, 2)
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
     app:startDestination="@id/homeFragment">
 
@@ -15,5 +16,17 @@
     <fragment
         android:id="@+id/genreDetailsFragment"
         android:name="com.sriv.shivam.musicwiki.ui.GenreDetailsFragment"
-        android:label="GenreDetailsFragment" />
+        android:label="GenreDetailsFragment" >
+        <action
+            android:id="@+id/action_genreDetailsFragment_to_pagerFragment"
+            app:destination="@id/pagerFragment" />
+        <action
+            android:id="@+id/action_genreDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pagerFragment"
+        android:name="com.sriv.shivam.musicwiki.ui.PagerFragment"
+        android:label="fragment_pager"
+        tools:layout="@layout/fragment_pager" />
 </navigation>

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="genre">Genre</string>
+    <string name="view_details">View Details</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artists</string>
+    <string name="tracks">Tracks</string>
 </resources>
