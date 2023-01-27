@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="Main Text View"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/detailImage"
@@ -36,6 +37,7 @@
         android:textSize="12sp"
         android:textColor="@color/black"
         android:layout_marginTop="12dp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainTv" />

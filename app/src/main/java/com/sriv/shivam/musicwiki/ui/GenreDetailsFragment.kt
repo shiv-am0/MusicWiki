@@ -46,6 +46,7 @@ class GenreDetailsFragment : Fragment() {
             Log.d(TAG, "getDetails function called")
             viewModel.getTagDetails(tagTitle.text.toString())
             viewModel.getTopAlbums(tagTitle.text.toString())
+            viewModel.getTopArtists(tagTitle.text.toString())
         }
 
         /*

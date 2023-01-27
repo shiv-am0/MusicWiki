@@ -3,8 +3,8 @@ package com.sriv.shivam.musicwiki.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
 import com.sriv.shivam.musicwiki.models.albums.Albums
+import com.sriv.shivam.musicwiki.models.artists.ArtistsInfo
 import com.sriv.shivam.musicwiki.models.genres.Genres
 import com.sriv.shivam.musicwiki.models.taginfo.TagInfo
 import com.sriv.shivam.musicwiki.repository.MusicWikiRepository
@@ -19,6 +19,7 @@ class MusicWikiViewModel(
     val tagsLiveData: MutableLiveData<Resource<Genres>> = MutableLiveData()
     val tagDetailsLiveData: MutableLiveData<Resource<TagInfo>> = MutableLiveData()
     val tagTopAlbumsLiveData: MutableLiveData<Resource<Albums>> = MutableLiveData()
+    val tagTopArtistsLiveData: MutableLiveData<Resource<ArtistsInfo>> = MutableLiveData()
 
     init {
         getTopTags()
@@ -67,5 +68,20 @@ class MusicWikiViewModel(
             }
         }
         return Resource.Error(tagDetailsResponse.message())
+    }
+
+    fun getTopArtists(tagName: String) = viewModelScope.launch {
+        tagTopArtistsLiveData.postValue(Resource.Loading())
+        val topArtistsResponse = musicWikiRepository.getTopArtists(tagName)
+        tagTopArtistsLiveData.postValue(handleTopArtistsResponse(topArtistsResponse))
+    }
+
+    private fun handleTopArtistsResponse(artistsDetailsResponse: Response<ArtistsInfo>): Resource<ArtistsInfo> {
+        if(artistsDetailsResponse.isSuccessful) {
+            artistsDetailsResponse.body()?.let {
+                return Resource.Success(it)
+            }
+        }
+        return Resource.Error(artistsDetailsResponse.message())
     }
 }

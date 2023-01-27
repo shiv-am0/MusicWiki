@@ -45,8 +45,8 @@ class AlbumsViewFragment : Fragment() {
         setFragmentResultListener("selectedTag") { key, bundle ->
             tagName = bundle.getString("data")
             Log.d(TAG, "$tagName in Albums View Fragment")
-            tagTitle.text = tagName
-            tagName?.let { viewModel.getTopAlbums(it)
+            tagName?.let {
+                viewModel.getTopAlbums(it)
             }
         }
 

@@ -3,6 +3,7 @@ package com.sriv.shivam.musicwiki.api
 import com.sriv.shivam.musicwiki.models.albums.Albums
 import com.sriv.shivam.musicwiki.models.genres.Genres
 import com.sriv.shivam.musicwiki.models.taginfo.TagInfo
+import com.sriv.shivam.musicwiki.models.artists.ArtistsInfo
 import com.sriv.shivam.musicwiki.utils.ApiKey.API_KEY
 import retrofit2.Response
 import retrofit2.http.POST
@@ -43,4 +44,16 @@ interface MusicWikiApi {
         @Query("format")
         format: String = "json"
     ):Response<Albums>
+
+    @POST("/2.0")
+    suspend fun getTopArtists(
+        @Query("tag")
+        tagName: String,
+        @Query("method")
+        method: String = "tag.gettopartists",
+        @Query("api_key")
+        apiKey: String = API_KEY,
+        @Query("format")
+        format: String = "json"
+    ):Response<ArtistsInfo>
 }
