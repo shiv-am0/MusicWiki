@@ -7,6 +7,7 @@ import com.sriv.shivam.musicwiki.models.albums.Albums
 import com.sriv.shivam.musicwiki.models.artists.ArtistsInfo
 import com.sriv.shivam.musicwiki.models.genres.Genres
 import com.sriv.shivam.musicwiki.models.taginfo.TagInfo
+import com.sriv.shivam.musicwiki.models.tracks.TracksInfo
 import com.sriv.shivam.musicwiki.repository.MusicWikiRepository
 import com.sriv.shivam.musicwiki.utils.Resource
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class MusicWikiViewModel(
     val tagDetailsLiveData: MutableLiveData<Resource<TagInfo>> = MutableLiveData()
     val tagTopAlbumsLiveData: MutableLiveData<Resource<Albums>> = MutableLiveData()
     val tagTopArtistsLiveData: MutableLiveData<Resource<ArtistsInfo>> = MutableLiveData()
+    val tagTopTracksLiveData: MutableLiveData<Resource<TracksInfo>> = MutableLiveData()
 
     init {
         getTopTags()
@@ -77,6 +79,21 @@ class MusicWikiViewModel(
     }
 
     private fun handleTopArtistsResponse(artistsDetailsResponse: Response<ArtistsInfo>): Resource<ArtistsInfo> {
+        if(artistsDetailsResponse.isSuccessful) {
+            artistsDetailsResponse.body()?.let {
+                return Resource.Success(it)
+            }
+        }
+        return Resource.Error(artistsDetailsResponse.message())
+    }
+
+    fun getTopTracks(tagName: String) = viewModelScope.launch {
+        tagTopTracksLiveData.postValue(Resource.Loading())
+        val topTracksResponse = musicWikiRepository.getTopTracks(tagName)
+        tagTopTracksLiveData.postValue(handleTopTracksResponse(topTracksResponse))
+    }
+
+    private fun handleTopTracksResponse(artistsDetailsResponse: Response<TracksInfo>): Resource<TracksInfo> {
         if(artistsDetailsResponse.isSuccessful) {
             artistsDetailsResponse.body()?.let {
                 return Resource.Success(it)

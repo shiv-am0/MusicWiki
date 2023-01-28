@@ -9,7 +9,7 @@
         android:id="@+id/detailImage"
         android:layout_width="150dp"
         android:layout_height="170dp"
-        android:src="#EFEF9F"
+        android:src="@drawable/musicitem"
         app:cardElevation="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

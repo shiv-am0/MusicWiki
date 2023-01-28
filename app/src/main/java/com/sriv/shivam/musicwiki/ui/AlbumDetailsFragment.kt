@@ -1,34 +1,16 @@
 package com.sriv.shivam.musicwiki.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.sriv.shivam.musicwiki.R
+import com.sriv.shivam.musicwiki.viewmodel.MusicWikiViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AlbumDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AlbumDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var viewModel: MusicWikiViewModel
+    private val TAG = "AlbumDetailsFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +20,38 @@ class AlbumDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_album_details, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        viewModel = (activity as MainActivity).viewModel
+//
+//        viewModel.tagTopAlbumsLiveData.observe(viewLifecycleOwner, Observer {
+//            when(it) {
+//                is Resource.Success -> {
+//                    hideProgressBar()
+//                    it.data?.let { albumsResponse ->
+////                        albumDetails.text =
+//                        Log.d(TAG, "Album Details loaded successfully")
+//                    }
+//                }
+//                is Resource.Error -> {
+//                    hideProgressBar()
+//                    it.message?.let {
+//                        Log.e(TAG, "An error occurred")
+//                    }
+//                }
+//                is Resource.Loading -> {
+//                    Log.d(TAG, "Tag Details loading")
+//                    showProgressBar()
+//                }
+//            }
+//        })
+//    }
+//
+//    private fun hideProgressBar() {
+//        paginationProgressBarAlbumsView.visibility = View.INVISIBLE
+//    }
+//
+//    private fun showProgressBar() {
+//        paginationProgressBarAlbumsView.visibility = View.VISIBLE
+//    }
 }

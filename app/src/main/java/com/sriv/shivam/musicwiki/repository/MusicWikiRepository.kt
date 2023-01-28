@@ -10,4 +10,6 @@ class MusicWikiRepository {
     suspend fun getTopAlbums(tagName: String) = RetrofitInstance.api.getTopAlbums(tagName)
 
     suspend fun getTopArtists(tagName: String) = RetrofitInstance.api.getTopArtists(tagName)
+
+    suspend fun getTopTracks(tagName: String) = RetrofitInstance.api.getTopTracks(tagName)
 }
